@@ -1,15 +1,49 @@
 package jm.task.core.jdbc.util;
 
+
+import jm.task.core.jdbc.model.User;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AnnotationConfiguration;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class Util {
-    private static final String URL = "jdbc:mysql://localhost:3306/mydb_test?autoReconnect=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
+    private static final String URL = "jdbc:mysql://localhost:3306/MyDB?autoReconnect=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "12345";
+    private static final String PASSWORD = "root";
 
-    public static Connection getConnection() {
+
+    public static Session getHibernateSession() {
+
+        Properties prop = new Properties();
+        prop.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL57Dialect");
+        prop.setProperty("hibernate.connection.username", "root");
+        prop.setProperty("hibernate.connection.password", "root");
+        prop.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/mydb");
+        prop.setProperty("show_sql", "true");
+
+
+        Session session = null;
+        try {
+            SessionFactory sessionFactory = new AnnotationConfiguration()
+                    .addPackage("jm.task.core.jdbc.model")
+                    .addProperties(prop)
+                    .addAnnotatedClass(User.class)
+                    .buildSessionFactory();
+            session = sessionFactory.openSession();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            System.err.println("Не удалось загрузить класс драйвера!");
+        }
+        return session;
+    }
+
+    public static Connection getJDBCConnection() {
 
         Connection connection = null;
 

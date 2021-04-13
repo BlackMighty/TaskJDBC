@@ -4,17 +4,17 @@ import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
 
-import java.sql.SQLOutput;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
+
         UserService userService = new UserServiceImpl();
         userService.createUsersTable();
         String name = "Vasya";
         userService.saveUser(name, "Ivanov", (byte) 25);
-        System.out.println("Пользователья добавлен успешно " +  name);
+        System.out.println("Пользователья добавлен успешно " + name);
         name = "Petya";
         userService.saveUser(name, "Petrov", (byte) 30);
         System.out.println("Пользователья добавлен успешно " + name);
@@ -34,3 +34,4 @@ public class Main {
         userService.dropUsersTable();
     }
 }
+
