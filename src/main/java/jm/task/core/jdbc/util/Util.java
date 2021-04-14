@@ -2,8 +2,6 @@ package jm.task.core.jdbc.util;
 
 
 import jm.task.core.jdbc.model.User;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
@@ -18,7 +16,7 @@ public class Util {
     private static final String PASSWORD = "root";
 
 
-    public static Session getHibernateSession() {
+    public static SessionFactory getHibernateSession() {
 
         Properties prop = new Properties();
         prop.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL57Dialect");
@@ -28,19 +26,15 @@ public class Util {
         prop.setProperty("show_sql", "true");
 
 
-        Session session = null;
-        try {
-            SessionFactory sessionFactory = new AnnotationConfiguration()
-                    .addPackage("jm.task.core.jdbc.model")
-                    .addProperties(prop)
-                    .addAnnotatedClass(User.class)
-                    .buildSessionFactory();
-            session = sessionFactory.openSession();
-        } catch (HibernateException e) {
-            e.printStackTrace();
-            System.err.println("Не удалось загрузить класс драйвера!");
-        }
-        return session;
+        // Session session = null;
+
+        SessionFactory sessionFactory = new AnnotationConfiguration()
+                .addPackage("jm.task.core.jdbc.model")
+                .addProperties(prop)
+                .addAnnotatedClass(User.class)
+                .buildSessionFactory();
+        sessionFactory.openSession();
+        return sessionFactory;
     }
 
     public static Connection getJDBCConnection() {
